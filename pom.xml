@@ -15,6 +15,7 @@
 	<description>Test task for Skai.io</description>
 	<properties>
 		<java.version>17</java.version>
+		<start-class>io.skai.platform.apianalyzer.ApiAnalyzerApplication</start-class>
 	</properties>
 	<dependencies>
 		<dependency>

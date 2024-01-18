@@ -16,7 +16,7 @@ public class ApiAnalyzerApplication {
 		 * [*] Implement file parser
 		 * [*] Validate each row's field
 		 * [*] Implement output printer
-		 * [_] Implement logic for data analyzation
+		 * [*] Implement logic for data analyzation
 		 * [_] Cover it by the tests
 		 * [_] Add Swagger
 		 */

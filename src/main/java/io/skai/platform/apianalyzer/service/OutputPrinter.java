@@ -1,62 +1,35 @@
 package io.skai.platform.apianalyzer.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Service
 public class OutputPrinter {
-    private final FileReader fileReader;
 
-    @Value("${frequently.used.urls.amount}")
-    private Integer frequentlyUsedUrlsAmount;
-
-    public OutputPrinter(FileReader fileReader) {
-        this.fileReader = fileReader;
-    }
-
-    public void generateAnalytics() {
-        System.out.println("\nResults:");
-        for (int i = 0; i < frequentlyUsedUrlsAmount; i++) {
-            printResult("/save", "POST", 15);
-        }
-
-        System.out.println("\n---- Statistics ----\nRequests per seconds:");
-        for (int i = 0; i < 5; i++) {
-            printStatistic("28/07/2006:10:25:04".substring(0, 19), 1);
-        }
-
-        var start = Instant.now();
-        var finish = Instant.now();
-        printCounters(123, 120, Duration.between(start, finish).toSeconds());
-    }
-
-    private void printResult(String path, String method, int invocationsAmount) {
-        if (invocationsAmount > 1) {
-            System.out.printf("%s – %s – %d times%n", path, method, invocationsAmount);
+    void printResult(String path, HttpMethod method, long invocationsCount) {
+        if (invocationsCount > 1) {
+            System.out.printf("%s – %s – %d times%n", path, method.name(), invocationsCount);
         } else {
-            System.out.printf("%s – %s – %d time%n", path, method, invocationsAmount);
+            System.out.printf("%s – %s – %d time%n", path, method.name(), invocationsCount);
         }
     }
 
-    private void printStatistic(String timestamp, int requestsAmount) {
-        if (requestsAmount > 1) {
-            System.out.printf("%s – %d requests%n", timestamp, requestsAmount);
+    void printStatistic(LocalDateTime dateTime, long requestsCount) {
+        var timestamp = dateTime.toString().substring(0, 19);
+        if (requestsCount > 1) {
+            System.out.printf("%s – %d requests%n", timestamp, requestsCount);
         } else {
-            System.out.printf("%s – %d request%n", timestamp, requestsAmount);
+            System.out.printf("%s – %d request%n", timestamp, requestsCount);
         }
     }
 
-    private void printCounters(int total, int valid, long executionTime) {
-        var result =
-            "\n---- Counters ----" +
+    void printCounters(int total, int valid, long executionTime) {
+        System.out.println(
             "\nTotal rows – " + total +
             "\nValid rows – " + valid +
-            "\nProcessed total time – " + executionTime + " sec" +
-            "\n------------------\n";
-
-        System.out.println(result);
+            "\nProcessed total time – " + executionTime / 1000.0 + " seconds"
+        );
     }
 }
