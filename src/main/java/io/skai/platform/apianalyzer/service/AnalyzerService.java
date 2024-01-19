@@ -80,8 +80,8 @@ public class AnalyzerService {
     }
 
     private void generateCounters(int totalRows, int validRows, long executionTime) {
-        System.out.print("\n---- Counters ----");
+        System.out.print("\n----- Counters -----");
         printer.printCounters(totalRows, validRows, executionTime);
-        System.out.println("------------------\n");
+        System.out.println("--------------------\n");
     }
 }
