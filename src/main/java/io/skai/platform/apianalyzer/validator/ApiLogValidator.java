@@ -34,8 +34,8 @@ public class ApiLogValidator {
 
         return validateIp(dto.ipAddress)
             && validateTimestamp(dto.timestamp)
-            && validateEndpoint(dto.endpoint)
             && validateHttpMethod(dto.method)
+            && validateEndpoint(dto.endpoint)
             && validateHttpStatus(dto.status);
     }
 
@@ -44,7 +44,7 @@ public class ApiLogValidator {
         var matcher = pattern.matcher(ipAddress);
 
         if (!matcher.matches()) {
-            LOG.warn("Invalid IP address format of \"{}\"!", ipAddress);
+            LOG.error("Invalid IP address format of \"{}\"", ipAddress);
             return false;
         } else {
             return true;
@@ -56,7 +56,7 @@ public class ApiLogValidator {
             LocalDateTime.parse(timestamp, DateTimeFormatter.ofPattern(DATETIME_PATTERN));
             return true;
         } catch (Exception e) {
-            LOG.warn("Invalid date-time format of \"{}\"! Valid schema: dd/MM/yyyy:HH:mm:ssZ", timestamp);
+            LOG.error("Invalid date-time format of \"{}\". Valid schema: dd/MM/yyyy:HH:mm:ssZ", timestamp);
             return false;
         }
     }
@@ -68,7 +68,7 @@ public class ApiLogValidator {
         var matcher = pattern.matcher(endpoint);
 
         if (!matcher.matches()) {
-            LOG.warn("Invalid URL path format of \"{}\"! Ensure that path does not end with the slash", endpoint);
+            LOG.error("Invalid URL path format of \"{}\". Ensure that path does not end with the slash", endpoint);
             return false;
         } else {
             return true;
@@ -76,13 +76,12 @@ public class ApiLogValidator {
     }
 
     private boolean validateHttpMethod(String method) {
-        try {
-            var httpMethod = HttpMethod.valueOf(method.toUpperCase());
-            return Arrays.asList(HttpMethod.values()).contains(httpMethod);
-        } catch (Exception e) {
-            LOG.warn("Unknown HTTP method \"{}\"!", method);
+        if (!Arrays.asList(HttpMethod.values()).contains(HttpMethod.valueOf(method))) {
+            LOG.error("Unknown HTTP method \"{}\"", method);
             return false;
         }
+
+        return true;
     }
 
     private boolean validateHttpStatus(String status) {
@@ -90,7 +89,7 @@ public class ApiLogValidator {
             var statusCode = HttpStatus.valueOf(Integer.parseInt(status));
             return Arrays.asList(HttpStatus.values()).contains(statusCode);
         } catch (Exception e) {
-            LOG.warn("Unknown HTTP status code \"{}\"!", status);
+            LOG.error("Unknown HTTP status code \"{}\"", status);
             return false;
         }
     }
