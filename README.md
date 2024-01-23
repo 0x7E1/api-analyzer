@@ -2,6 +2,7 @@
 ###### Technical task for Skai.io interview
 
 ## Output example:
+`[in Embedded-mode]`
 ```
 Results:
 /save – PUT – 3 times
@@ -22,6 +23,10 @@ Valid rows – 9
 Processed total time – 0.011 seconds
 --------------------
 ```
+In generic **web-server** mode [`analyzer.embedded-mode.enabled = false`] the console output will be almost the same,
+but without `Results` block.
+
+The `Results` block will be returned in CSV format as a file for downloading.
 
 ## Input example:
 `[CSV file]`
@@ -47,6 +52,6 @@ Processed total time – 0.011 seconds
 ### How to add new statistic parameters:
 1. Add new column into **_statistic.csv_** file.
 2. Extend `ApiLog` and `ApiLogDto` _model_ classes with new desired field.
-3. Extend `FileReader.loadData()` method for binding added parameter with new _models_ field.
-4. Implement new validation method inside the `ApiLogValidator` service.
+3. Extend `CsvDataLoader.fromStream()` default method for binding added parameter with new _model_ fields.
+4. Implement new validator inherited from `ApiLogValidator` service.
 5. Implement desired logic for your statistic's parameter.

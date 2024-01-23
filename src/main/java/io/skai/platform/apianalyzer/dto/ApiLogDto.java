@@ -1,12 +1,13 @@
 package io.skai.platform.apianalyzer.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 
-@AllArgsConstructor
-public class ApiLogDto {
-    public String ipAddress;
-    public String timestamp;
-    public String method;
-    public String endpoint;
-    public String status;
+@Builder
+public record ApiLogDto(
+    String ipAddress,
+    String timestamp,
+    String method,
+    String endpoint,
+    String status
+) {
 }
