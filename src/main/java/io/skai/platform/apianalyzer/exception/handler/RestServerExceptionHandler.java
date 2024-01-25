@@ -1,6 +1,7 @@
-package io.skai.platform.apianalyzer.exception;
+package io.skai.platform.apianalyzer.exception.handler;
 
 import io.skai.platform.apianalyzer.dto.ResponseDto;
+import io.skai.platform.apianalyzer.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,7 +18,7 @@ public class RestServerExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(ResponseDto.builder()
-                .message("Provided CSV file is invalid. Check file's format.")
+                .message("Provided CSV file is invalid. Check file's format")
                 .build());
     }
 
@@ -26,7 +27,7 @@ public class RestServerExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity
             .status(HttpStatus.NOT_FOUND)
             .body(ResponseDto.builder()
-                .message("Resource not found or invalid token.")
+                .message("Resource not found or invalid token")
                 .build());
     }
 
@@ -35,7 +36,7 @@ public class RestServerExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ResponseDto.builder()
-                .message("Execution failed due to server error.\nSee the logs for more details.")
+                .message("Execution failed due to server error. See the logs for more details")
                 .build());
     }
 }

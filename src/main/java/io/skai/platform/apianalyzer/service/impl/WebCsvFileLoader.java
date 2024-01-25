@@ -18,7 +18,7 @@ public class WebCsvFileLoader implements CsvDataLoader {
     @Override
     public List<ApiLogDto> loadApiLogs() {
         try {
-            return fromStream(inputStream);
+            return fromInputStream(inputStream);
         } catch (Exception e) {
             LOG.error("Error occurred while reading the input file", e);
             return null;

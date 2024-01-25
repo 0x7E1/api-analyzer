@@ -12,14 +12,14 @@ public class HttpStatusValidator implements ApiLogValidator {
     private static final Logger LOG = LoggerFactory.getLogger(HttpStatusValidator.class);
 
     @Override
-    public boolean isInvalid(ApiLogDto dto) {
+    public boolean isValid(ApiLogDto dto) {
         var httpStatus = dto.status();
         try {
             var code = HttpStatus.valueOf(Integer.parseInt(httpStatus));
-            return !Arrays.asList(HttpStatus.values()).contains(code);
+            return Arrays.asList(HttpStatus.values()).contains(code);
         } catch (Exception e) {
             LOG.error("Unknown HTTP status code \"{}\"", httpStatus);
-            return true;
+            return false;
         }
     }
 }

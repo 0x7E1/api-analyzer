@@ -12,13 +12,13 @@ public class HttpMethodValidator implements ApiLogValidator {
     private static final Logger LOG = LoggerFactory.getLogger(HttpMethodValidator.class);
 
     @Override
-    public boolean isInvalid(ApiLogDto dto) {
+    public boolean isValid(ApiLogDto dto) {
         var httpMethod = dto.method();
         if (!Arrays.asList(HttpMethod.values()).contains(HttpMethod.valueOf(httpMethod))) {
             LOG.error("Unknown HTTP method \"{}\"", httpMethod);
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 }

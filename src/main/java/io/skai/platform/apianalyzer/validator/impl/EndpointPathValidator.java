@@ -12,18 +12,18 @@ public class EndpointPathValidator implements ApiLogValidator {
     private static final String ENDPOINT_PATH_PATTERN = "^/\\w+(?:[.:~-]\\w+)*(?:/\\w+(?:[.:~-]\\w+)*)*$";
 
     @Override
-    public boolean isInvalid(ApiLogDto dto) {
+    public boolean isValid(ApiLogDto dto) {
         var endpoint = dto.endpoint();
-        if (endpoint.equals("/")) { return false; }
+        if (endpoint.equals("/")) { return true; }
 
         var pattern = Pattern.compile(ENDPOINT_PATH_PATTERN);
         var matcher = pattern.matcher(endpoint);
 
         if (matcher.matches()) {
-            return false;
+            return true;
         } else {
             LOG.error("Invalid URL path format of \"{}\". Ensure that path does not end with the slash", endpoint);
-            return true;
+            return false;
         }
     }
 }

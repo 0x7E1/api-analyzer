@@ -2,19 +2,12 @@ package io.skai.platform.apianalyzer.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpMethod;
 
 @Getter
 @Builder
 public class AnalyticsResult {
     String endpoint;
-    String httpMethod;
+    HttpMethod httpMethod;
     int invocationsCount;
-
-    public static AnalyticsResult fromApiLog(ApiLog apiLog, int invocationsCount) {
-        return new AnalyticsResult(
-            apiLog.endpoint(),
-            apiLog.httpMethod().name(),
-            invocationsCount
-        );
-    }
 }

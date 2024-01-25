@@ -19,7 +19,7 @@ public class AnalyzerController {
 
     @Operation(
         summary = "Upload CSV file with input data",
-        description = "Returns a token which is required to get results for this input data file."
+        description = "Returns a token which is required to get results for this input data file"
     )
     @PostMapping(
         path = "/upload-data",

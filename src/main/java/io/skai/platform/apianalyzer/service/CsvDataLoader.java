@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface CsvDataLoader {
-    default List<ApiLogDto> fromStream(InputStream is) throws IOException {
+    default List<ApiLogDto> fromInputStream(InputStream is) throws IOException {
         List<ApiLogDto> apiLogDtos = new ArrayList<>();
-        var br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-
         String line;
+        var br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         while ((line = br.readLine()) != null) {
             String[] rowValues = line.split(";");
             var apiLog = ApiLogDto.builder()

@@ -1,13 +1,16 @@
 package io.skai.platform.apianalyzer.service;
 
+import com.google.common.collect.Lists;
+import io.skai.platform.apianalyzer.dto.ApiLogDto;
 import io.skai.platform.apianalyzer.model.AnalyticsResult;
 import io.skai.platform.apianalyzer.model.ApiLog;
 import io.skai.platform.apianalyzer.model.enums.ValidationType;
 import io.skai.platform.apianalyzer.validator.ApiLogValidator;
 import io.skai.platform.apianalyzer.validator.impl.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static io.skai.platform.apianalyzer.model.enums.ValidationType.*;
 
@@ -31,7 +34,41 @@ public interface AnalyzationService {
         };
     }
 
-    List<AnalyticsResult> calculateResults(List<ApiLog> rows);
-    void calculateStatistics(List<ApiLog> rows);
-    void calculateCounters(int totalRows, int validRows, long executionTime);
+    default List<Map.Entry<ApiLog, Long>> calculateMostFrequentApiCalls(List<ApiLog> rows, long resultsLimit) {
+        return rows.stream()
+            .map(it -> ApiLog.builder()
+                .ipAddress(it.ipAddress())
+                .timestamp(it.timestamp())
+                .httpMethod(it.httpMethod())
+                .endpoint(it.endpoint())
+                .httpMethod(it.httpMethod())
+                .build())
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+            .entrySet().stream()
+            .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+            .limit(resultsLimit)
+            .toList();
+    }
+
+    default List<ApiLogDto> getValidRows(List<ApiLogDto> inputData) {
+        ApiLogValidator validator;
+        ArrayList<ApiLogDto> invalidRows = Lists.newArrayList();
+        for (var validationType : ValidationType.values()) {
+            validator = setValidationStrategy(validationType);
+
+            for (ApiLogDto dto : inputData) {
+                if (!validator.isValid(dto)) {
+                    invalidRows.add(dto);
+                }
+            }
+        }
+
+        return inputData.stream()
+            .filter(it -> !invalidRows.contains(it))
+            .toList();
+    }
+
+    List<AnalyticsResult> generateResults(List<ApiLog> rows);
+    void generateStatistics(List<ApiLog> rows);
+    void generateCounters(int totalRows, int validRows, long executionTime);
 }

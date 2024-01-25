@@ -25,10 +25,10 @@ public class LocalCsvFileLoader implements CsvDataLoader {
         var resource = resourceLoader.getResource(INPUT_FILE_PATH);
 
         try (var is = resource.getInputStream()) {
-            return fromStream(is);
+            return fromInputStream(is);
         } catch (Exception e) {
-            LOG.error("Error occurred while reading statistic.csv file", e);
-            return List.of();
+            LOG.error("Error occurred while reading 'statistic.csv' file", e);
+            return null;
         }
     }
 }

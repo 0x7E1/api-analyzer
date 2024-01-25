@@ -13,14 +13,14 @@ public class TimestampValidator implements ApiLogValidator {
     public static final String DATETIME_PATTERN = "dd/MM/yyyy:HH:mm:ssZ";
 
     @Override
-    public boolean isInvalid(ApiLogDto dto) {
+    public boolean isValid(ApiLogDto dto) {
         var timestamp = dto.timestamp();
         try {
             LocalDateTime.parse(timestamp, DateTimeFormatter.ofPattern(DATETIME_PATTERN));
-            return false;
+            return true;
         } catch (Exception e) {
             LOG.error("Invalid date-time format of \"{}\". Valid schema: dd/MM/yyyy:HH:mm:ssZ", timestamp);
-            return true;
+            return false;
         }
     }
 }
